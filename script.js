@@ -1,29 +1,66 @@
 // Banco de Questões (Simulando o que viria do Firebase/JSON)
 const questions = [
     {
-        category: "Vendas e Negociação",
-        question: "Segundo o Código de Defesa do Consumidor, a prática de condicionar o fornecimento de produto ou serviço ao fornecimento de outro é chamada de:",
+        category: "Vendas e Negociação (Pareto: CDC)",
+        question: "De acordo com o Código de Defesa do Consumidor, o prazo para o cliente reclamar de vício aparente em serviços não duráveis (como uma tarifa bancária) é de:",
         options: [
-            "Venda Casada",
-            "Venda Cruzada",
-            "Upselling",
-            "Dumping"
+            "30 dias",
+            "90 dias",
+            "7 dias",
+            "15 dias"
         ],
         correctIndex: 0,
-        explanation: "Correto! A Venda Casada é proibida pelo Art. 39 do CDC. É quando o banco te obriga a levar um seguro para te dar um empréstimo."
+        explanation: "Correto! O Art. 26 do CDC define 30 dias para produtos/serviços não duráveis e 90 dias para duráveis."
     },
     {
-        category: "Informática - Segurança",
-        question: "Qual o nome do ataque onde o criminoso envia um e-mail falso se passando pelo banco para roubar sua senha?",
+        category: "Informática (Pareto: Segurança)",
+        question: "Um Agente Comercial recebe um link por SMS dizendo que seus pontos do cartão vão expirar. Ao clicar, o site pede a senha. Isso é:",
         options: [
             "Ransomware",
-            "Phishing",
-            "Spyware",
-            "DDoS"
+            "Smishing (Phishing via SMS)",
+            "Spam comum",
+            "Vishing"
         ],
         correctIndex: 1,
-        explanation: "Exato! Phishing (pescaria) é a técnica de enganar o usuário com comunicações falsas."
+        explanation: "Perfeito! Quando o Phishing ocorre via SMS, ele recebe o nome específico de Smishing."
+    },
+    {
+        category: "Português (Pareto: Crase)",
+        question: "Assinale a alternativa que preenche corretamente a lacuna: 'O estagiário entregou o relatório ___ gerente.'",
+        options: [
+            "a",
+            "à",
+            "há",
+            "as"
+        ],
+        correctIndex: 1,
+        explanation: "Correto! Quem entrega, entrega ALGO (o relatório) A alguém (a gerente). Preposição A + Artigo A = À."
+    },
+    {
+        category: "Vendas (Pareto: Ética)",
+        question: "No contexto bancário, o sigilo das informações dos clientes é um dever ético e legal. O compartilhamento de dados sem autorização fere qual lei?",
+        options: [
+            "Lei de Diretrizes Orçamentárias",
+            "LGPD (Lei Geral de Proteção de Dados)",
+            "Lei Pelé",
+            "Código Civil apenas"
+        ],
+        correctIndex: 1,
+        explanation: "Isso! A LGPD regula o tratamento de dados pessoais e é tema certo na Cesgranrio."
+    },
+    {
+        category: "Matemática Financeira (Pareto)",
+        question: "No Sistema de Amortização Constante (SAC), o valor das prestações ao longo do tempo tende a:",
+        options: [
+            "Aumentar",
+            "Manter-se constante",
+            "Diminuir",
+            "Dobrar no final"
+        ],
+        correctIndex: 2,
+        explanation: "Exato! No SAC, como a amortização é fixa e os juros caem sobre o saldo devedor menor, a prestação decresce."
     }
+];
 ];
 
 let currentQuestion = 0;
