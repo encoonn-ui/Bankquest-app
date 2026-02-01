@@ -1,3 +1,30 @@
+// Importar Firebase (via CDN)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+
+// SUAS CREDENCIAIS AQUI
+const firebaseConfig = {
+  apiKey: "AIzaSyDHONAHV0t2u3hJymAAuWNjzw199_i_s58",
+  authDomain: "seu-projeto.firebaseapp.com",
+  projectId: "seu-projeto",
+  storageBucket: "seu-projeto.appspot.com",
+  messagingSenderId: "...",
+  appId: "..."
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Função para salvar seu progresso automaticamente
+async function saveProgress(xp, streak, hits, errors) {
+    await setDoc(doc(db, "user_stats", "endrew"), {
+        xp: xp,
+        streak: streak,
+        total_hits: hits,
+        total_errors: errors,
+        last_update: new Date()
+    }, { merge: true });
+}
 // Banco de Questões (Simulando o que viria do Firebase/JSON)
 const questions = [
     {
