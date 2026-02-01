@@ -1,4 +1,17 @@
-const questions = [
+// Configurações de Acesso
+const GOOGLE_API_KEY = "AIzaSyDqpjtq_HwStJvQoxDsgIYRso_CbhQsWZQ"; 
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDqpjtq_HwStJvQoxDsgIYRso_CbhQsWZQ",
+  authDomain: "bankquest-app.firebaseapp.com",
+  projectId: "bankquest-app",
+  storageBucket: "bankquest-app.appspot.com",
+  messagingSenderId: "SUA_ID",
+  appId: "SUA_APP_ID"
+};
+
+// O restante do seu código (const questions...) continua abaixo
+    const questions = [
     {
         category: "Vendas e Negociação (Pareto: CDC)",
         question: "De acordo com o Código de Defesa do Consumidor, o prazo para o cliente reclamar de vício aparente em serviços não duráveis (como uma tarifa bancária) é de:",
