@@ -199,3 +199,29 @@ function nextQuestion() {
 
 // Iniciar o app
 loadQuestion();
+// FUNÇÃO QUE CONVERSA COM O GEMINI
+async function buscarQuestaoInedita() {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
+    
+    const prompt = {
+        contents: [{
+            parts: [{
+                text: "Gere uma questão inédita da Cesgranrio para o concurso do Banco do Brasil (Agente Comercial). Use a Lei de Pareto para escolher o tema. Retorne APENAS um JSON: {category, question, options:[], correctIndex, explanation}"
+            }]
+        }]
+    };
+
+    try {
+        const response = await fetch(url, { method: 'POST', body: JSON.stringify(prompt) });
+        const data = await response.json();
+        const resText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
+        const novaQuestao = JSON.parse(resText);
+        
+        // Coloca a nova questão no jogo
+        questions.push(novaQuestao);
+        currentQuestion = questions.length - 1;
+        loadQuestion();
+    } catch (e) {
+        alert("Erro ao gerar missão. Verifique sua chave no console!");
+    }
+}
