@@ -1,5 +1,5 @@
 // CONFIGURAÇÕES GLOBAIS
-const GOOGLE_API_KEY = "AIzaSyDqpjtq_HwStJvQoxDsgIYRso_CbhQsWZQ";
+const GOOGLE_API_KEY = "AIzaSyAZefeogwDIYuqRwQ4TOS7ZKr09BGwGL94";
 let xp = 0;
 let streak = 0;
 let questaoAtual = null;
