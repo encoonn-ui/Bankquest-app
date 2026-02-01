@@ -10,10 +10,15 @@ async function buscarQuestaoInedita() {
     const catTag = document.getElementById('category');
     const qText = document.getElementById('question-text');
     const container = document.getElementById('options-container');
+    const feedbackArea = document.getElementById('feedback-area');
 
+    // 1. Bloqueia o botão para não clicar duas vezes
     btn.innerText = "⚡ GERANDO MISSÃO...";
     btn.disabled = true;
     catTag.innerText = "ANALISANDO EDITAL...";
+    
+    // Garante que a área de feedback esteja escondida ao começar
+    if(feedbackArea) feedbackArea.classList.add('hidden');
 
     // Estratégia de Fases Cronológicas para Aprovação
     const fases = [
@@ -35,28 +40,39 @@ async function buscarQuestaoInedita() {
     };
 
     try {
-        const response = await fetch(url, { method: 'POST', body: JSON.stringify(promptCorpo) });
+        // --- AQUI ESTAVA O ERRO: FALTAVA O HEADER ---
+        const response = await fetch(url, { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }, // <--- ESSA LINHA CONSERTA TUDO
+            body: JSON.stringify(promptCorpo) 
+        });
+
         const data = await response.json();
-        const resText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
+        
+        // Limpeza de segurança para garantir que o JSON venha limpo
+        let resText = data.candidates[0].content.parts[0].text;
+        resText = resText.replace(/```json/g, "").replace(/```/g, "").trim();
+        
         questaoAtual = JSON.parse(resText);
         
         // Atualiza a Interface
         catTag.innerText = questaoAtual.category;
         qText.innerText = questaoAtual.question;
         container.innerHTML = '';
-        document.getElementById('feedback-area').classList.add('hidden');
 
         questaoAtual.options.forEach((opt, i) => {
             const b = document.createElement('button');
             b.className = 'option-btn';
             b.innerText = opt;
-            b.style.cssText = "background: #29292e; border: 1px solid #323238; color: white; padding: 12px; border-radius: 6px; cursor: pointer; text-align: left; margin-bottom: 8px; width: 100%;";
+            // Estilo direto no JS para garantir que não quebre sem CSS
+            b.style.cssText = "background: #29292e; border: 1px solid #323238; color: white; padding: 12px; border-radius: 6px; cursor: pointer; text-align: left; margin-bottom: 8px; width: 100%; transition: all 0.2s;";
             b.onclick = () => verificarResposta(i, b);
             container.appendChild(b);
         });
 
     } catch (e) {
-        alert("Erro ao conectar com a IA. Verifique sua conexão em Salvador!");
+        console.error(e); // Mostra o erro real no console (F12) se houver
+        alert("Erro na conexão. Verifique se sua internet está ok!");
     } finally {
         btn.innerText = "✨ GERAR MISSÃO INÉDITA (IA)";
         btn.disabled = false;
@@ -68,21 +84,39 @@ function verificarResposta(idx, b) {
     todosBotoes.forEach(btn => btn.disabled = true);
 
     if (idx === questaoAtual.correctIndex) {
-        b.style.background = "#04d361";
-        document.getElementById('snd-correct').play();
-        confetti({ particleCount: 100 });
+        b.style.background = "#04d361"; // Verde
+        b.style.borderColor = "#04d361";
+        
+        // Tenta tocar o som se existir
+        const audio = document.getElementById('snd-correct');
+        if(audio) audio.play();
+        
+        // Confetes
+        if(typeof confetti !== 'undefined') confetti({ particleCount: 100 });
+        
         xp += 100;
         streak++;
     } else {
-        b.style.background = "#f75a68";
-        todosBotoes[questaoAtual.correctIndex].style.background = "#04d361";
+        b.style.background = "#f75a68"; // Vermelho
+        b.style.borderColor = "#f75a68";
+        // Mostra a correta
+        if(todosBotoes[questaoAtual.correctIndex]) {
+            todosBotoes[questaoAtual.correctIndex].style.background = "#04d361";
+        }
         streak = 0;
     }
 
-    document.getElementById('explanation').innerText = "💡 " + questaoAtual.explanation;
-    document.getElementById('feedback-area').classList.remove('hidden');
-    document.getElementById('score-counter').innerText = `💎 ${xp} XP`;
-    document.getElementById('streak-counter').innerText = `🔥 ${streak}`;
+    const explanationEl = document.getElementById('explanation');
+    const feedbackArea = document.getElementById('feedback-area');
+    
+    if(explanationEl) explanationEl.innerText = "💡 " + questaoAtual.explanation;
+    if(feedbackArea) feedbackArea.classList.remove('hidden');
+    
+    const scoreEl = document.getElementById('score-counter');
+    const streakEl = document.getElementById('streak-counter');
+    
+    if(scoreEl) scoreEl.innerText = `💎 ${xp} XP`;
+    if(streakEl) streakEl.innerText = `🔥 ${streak}`;
 }
 
 // Expõe a função para o botão do HTML funcionar
