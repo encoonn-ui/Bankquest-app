@@ -213,3 +213,38 @@ function nextQuestion() {
 
 // Iniciar o app
 loadQuestion();
+
+
+// --- FUNÇÃO GERADORA DE MISSÕES (ESTRATEGIA PARETO) ---
+async function buscarQuestaoInedita() {
+    const btn = document.getElementById('ai-btn');
+    if(btn) { btn.innerText = "⚡ GERANDO..."; btn.disabled = true; }
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
+    
+    const promptCorpo = {
+        contents: [{
+            parts: [{
+                text: "Gere uma questão Cesgranrio para Agente Comercial do BB sobre Vendas ou Bancários. Retorne APENAS o JSON: {\"category\": \"Materia\", \"question\": \"Pergunta\", \"options\": [\"A\",\"B\",\"C\",\"D\",\"E\"], \"correctIndex\": 0, \"explanation\": \"Resumo\"}"
+            }]
+        }]
+    };
+
+    try {
+        const response = await fetch(url, { method: 'POST', body: JSON.stringify(promptCorpo) });
+        const data = await response.json();
+        const resText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
+        const novaQ = JSON.parse(resText);
+        
+        questions.push(novaQ);
+        currentQuestion = questions.length - 1;
+        loadQuestion(); 
+    } catch (e) {
+        alert("Erro na conexão com a IA!");
+    } finally {
+        if(btn) { btn.innerText = "✨ GERAR MISSÃO INÉDITA (IA)"; btn.disabled = false; }
+    }
+}
+
+// Garante que o botão do HTML encontre a função
+window.buscarQuestaoInedita = buscarQuestaoInedita;
