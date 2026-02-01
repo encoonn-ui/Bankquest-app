@@ -1,3 +1,6 @@
+// 1. CHAVE DA API GEMINI (GOOGLE)
+const GOOGLE_API_KEY = "AIzaSyDqpjtq_HwStJvQoxDsgIYRso_CbhQsWZQ";
+
 // Importar Firebase (via CDN)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
