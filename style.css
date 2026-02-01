@@ -1,0 +1,133 @@
+:root {
+    --bg-color: #121214; /* Fundo Escuro Moderno */
+    --card-bg: #202024;
+    --primary: #8257e6; /* Roxo vibrante */
+    --correct: #04d361; /* Verde Neon */
+    --wrong: #f75a68; /* Vermelho Suave */
+    --text: #e1e1e6;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.game-container {
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #323238;
+    transition: transform 0.3s ease;
+}
+
+.category-tag {
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option-btn {
+    background: #29292e;
+    border: 2px solid transparent;
+    padding: 15px;
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.option-btn:hover {
+    border-color: var(--primary);
+    background: #323238;
+}
+
+/* Classes de Estado (Adicionadas pelo JS) */
+.correct {
+    background-color: rgba(4, 211, 97, 0.1) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+}
+
+.wrong {
+    background-color: rgba(247, 90, 104, 0.1) !important;
+    border-color: var(--wrong) !important;
+    animation: shake 0.5s;
+}
+
+#feedback-area {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #323238;
+    animation: fadeIn 0.5s;
+}
+
+#next-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.hidden { display: none; }
+
+/* Animações */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
