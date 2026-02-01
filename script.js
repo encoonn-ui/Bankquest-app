@@ -161,11 +161,16 @@ function updateStats(isCorrect) {
     if(isCorrect) {
         xp += 100;
         streak++;
+        // Incrementa acertos totais
     } else {
         streak = 0;
+        // Incrementa erros totais
     }
     document.getElementById('score-counter').innerText = `💎 ${xp} XP`;
     document.getElementById('streak-counter').innerText = `🔥 ${streak}`;
+    
+    // SALVA NO FIREBASE
+    saveProgress(xp, streak, 0, 0); // Depois ajustamos os contadores detalhados
 }
 
 function triggerConfetti() {
