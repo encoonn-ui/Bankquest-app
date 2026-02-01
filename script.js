@@ -225,3 +225,26 @@ async function buscarQuestaoInedita() {
         alert("Erro ao gerar missão. Verifique sua chave no console!");
     }
 }
+async function gerarRelatorioEstrategico() {
+    const docRef = doc(db, "user_stats", "endrew");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const d = docSnap.data();
+        const totalQuestões = d.total_hits + d.total_errors;
+        const aproveitamento = ((d.total_hits / totalQuestões) * 100).toFixed(1);
+        
+        let direcao = "";
+        if (aproveitamento < 50) {
+            direcao = "🚨 Alerta: Foque 100% em Teoria de Vendas e Negociação. Você precisa fortalecer a base.";
+        } else if (aproveitamento < 80) {
+            direcao = "📈 No Caminho: Aumente o ritmo de questões de Informática e Português. Você está quase lá.";
+        } else {
+            direcao = "🏆 Excelente: Você atingiu o nível de aprovação! Comece a revisar Matemática Financeira.";
+        }
+
+        alert(`--- RELATÓRIO DE BATALHA ---\nDesempenho Atual: ${aproveitamento}%\nDireção: ${direcao}`);
+    } else {
+        alert("Inicie sua primeira missão para gerar dados!");
+    }
+}
