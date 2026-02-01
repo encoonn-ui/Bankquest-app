@@ -11,7 +11,23 @@ const firebaseConfig = {
   messagingSenderId: "...",
   appId: "..."
 };
+// Relatório de Desempenho (Estratégia Pareto)
+async function generateDailyReport(userId) {
+    const docRef = doc(db, "user_stats", userId);
+    const docSnap = await getDoc(docRef);
 
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        const taxaAcerto = (data.total_hits / (data.total_hits + data.total_errors)) * 100;
+        
+        // Aqui entra o prompt para a sua API Google Flash 2.5
+        const prompt = `Analise meu desempenho: Acertos: ${data.total_hits}, Erros: ${data.total_errors}. 
+        Foque no cargo Agente Comercial BB. Qual conteúdo do edital devo focar usando Pareto 80/20 para atingir 80% de acerto?`;
+        
+        console.log("Dica do Mentor AI:", prompt);
+        // Em seguida, conectamos a chamada da sua API Key aqui.
+    }
+}
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
