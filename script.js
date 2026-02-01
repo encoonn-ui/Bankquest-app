@@ -3,84 +3,66 @@
 const WORKER_URL = "https://plain-surf-53cfproxy-gemini-concurso.encoonn.workers.dev"; // Cole seu link aqui se for diferente
 
 async function buscarQuestaoInedita() {
-    // 1. Prepara o terreno (Visual)
+    // 1. Defina o link do seu Worker do Cloudflare (visto na image_15b579.png)
+const WORKER_URL = "https://plain-surf-53cfproxy-gemini-concurso.encoonn.workers.dev";
+
+async function buscarQuestaoInedita() {
     const btn = document.getElementById('ai-btn');
     const catTag = document.getElementById('category');
     const qText = document.getElementById('question-text');
     const container = document.getElementById('options-container');
-    const feedbackArea = document.getElementById('feedback-area');
 
-    btn.innerText = "⚡ CONECTANDO AO CÉREBRO...";
+    // Feedback visual para o usuário
+    btn.innerText = "⚡ GERANDO MISSÃO...";
     btn.disabled = true;
-    catTag.innerText = "ANALISANDO EDITAL...";
-    
-    if(feedbackArea) feedbackArea.classList.add('hidden');
 
-    // 2. Sorteia o Tópico (Igual ao seu código original)
+    // Sorteio de tópicos (Baseado no seu estudo para Agente Comercial)
     const fases = [
-       "Fase 1: Vendas e Negociação (CDC e LGPD) - FOCO TOTAL",
-       "Fase 2: Conhecimentos Bancários (Pix e SFN)",
-       "Fase 3: Português (Crase e Interpretação Cesgranrio)",
-       "Fase 4: Informática (Segurança da Informação)"
+       "Vendas e Negociação (Foco em CDC)",
+       "Conhecimentos Bancários (Estrutura do SFN)",
+       "Informática (Segurança de Dados)"
     ];
     const faseSorteada = fases[Math.floor(Math.random() * fases.length)];
 
     try {
-        // 3. Chama o SEU servidor (Worker) em vez do Google direto
+        // Chamada para o SEU servidor no Cloudflare
         const response = await fetch(WORKER_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                // Enviamos apenas o texto do prompt
-                prompt: `Aja como mentor para o Banco do Brasil. Gere uma questão Cesgranrio sobre ${faseSorteada}. Responda APENAS o JSON: {"category": "${faseSorteada}", "question": "Pergunta", "options": ["A","B","C","D","E"], "correct": 0, "comment": "Comentário"}`
+                prompt: `Gere uma questão de múltipla escolha para o Banco do Brasil sobre ${faseSorteada}. Responda APENAS o JSON neste formato: {"category": "${faseSorteada}", "question": "texto da pergunta", "options": ["A", "B", "C", "D", "E"], "correct": 0}`
             })
         });
 
-        if (!response.ok) {
-            throw new Error(`Erro no Servidor: ${response.status}`);
-        }
-
         const data = await response.json();
-
-        // 4. Limpeza da Resposta (Igual ao seu código original)
-        // O Worker devolve a estrutura do Google, então lemos do mesmo jeito:
-        let resText = data.candidates[0].content.parts[0].text;
         
-        // Remove os marcadores de código que o Gemini às vezes coloca (```json ... ```)
+        // Limpando a resposta da IA para garantir que seja um JSON puro
+        let resText = data.candidates[0].content.parts[0].text;
         resText = resText.replace(/```json/g, "").replace(/```/g, "").trim();
         
-        // Converte o texto limpo em Objeto Real
-        questaoAtual = JSON.parse(resText);
+        const questao = JSON.parse(resText);
 
-        // 5. Mostra na Tela
-        catTag.innerText = questaoAtual.category;
-        qText.innerText = questaoAtual.question;
-        
-        // Limpa botões antigos e cria os novos
-        container.innerHTML = "";
-        
-        questaoAtual.options.forEach((opt, i) => {
+        // Preenchendo a página com a questão
+        catTag.innerText = questao.category;
+        qText.innerText = questao.question;
+        container.innerHTML = ""; // Limpa opções antigas
+
+        questao.options.forEach((opt, i) => {
             const b = document.createElement('button');
             b.className = 'option-btn';
             b.innerText = opt;
-            // Estilo mantido
-            b.style.cssText = "background: #29292e; border: 1px solid #323238; color: white; padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; font-size: 1rem;";
-            
-            b.onmouseover = () => b.style.borderColor = "#8257e6";
-            b.onmouseout = () => b.style.borderColor = "#323238";
-            b.onclick = () => verificarResposta(i, b); // Chama sua função de verificar
-            
+            b.onclick = () => alert(i === questao.correct ? "Acertou!" : "Errou!");
             container.appendChild(b);
         });
 
     } catch (error) {
-        console.error(error);
-        alert("Erro ao gerar missão. Tente novamente! (Verifique o console para detalhes)");
-        catTag.innerText = "ERRO DE CONEXÃO";
+        console.error("Erro:", error);
+        alert("Erro ao conectar com o servidor da IA.");
     } finally {
         btn.innerText = "✨ GERAR MISSÃO INÉDITA (IA)";
         btn.disabled = false;
     }
+}
 }
 }
 
