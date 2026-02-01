@@ -203,10 +203,21 @@ loadQuestion();
 async function buscarQuestaoInedita() {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
     
+    // Lógica de Direção: Prioriza Vendas (Pareto), depois Conhecimentos Bancários e Informática
+    const fases = [
+        "Fase 1: Vendas e Negociação (CDC, LGPD e Ética) - Peso Máximo",
+        "Fase 2: Conhecimentos Bancários (Sistema Financeiro Nacional e Pix)",
+        "Fase 3: Português (Crase e Interpretação de Texto)",
+        "Fase 4: Informática (Segurança da Informação e Atalhos Windows 10)"
+    ];
+
     const prompt = {
         contents: [{
             parts: [{
-                text: "Gere uma questão inédita da Cesgranrio para o concurso do Banco do Brasil (Agente Comercial). Use a Lei de Pareto para escolher o tema. Retorne APENAS um JSON: {category, question, options:[], correctIndex, explanation}"
+                text: `Aja como um Mentor de Concursos para o Banco do Brasil (Agente Comercial). 
+                Gere uma questão inédita da Cesgranrio focada na ${fases[Math.floor(Math.random() * fases.length)]}. 
+                Siga rigorosamente o edital de 2021/2023. 
+                Retorne apenas o JSON: {category, question, options:[], correctIndex, explanation}`
             }]
         }]
     };
@@ -217,13 +228,13 @@ async function buscarQuestaoInedita() {
         const resText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "");
         const novaQuestao = JSON.parse(resText);
         
-        // Coloca a nova questão no jogo
         questions.push(novaQuestao);
         currentQuestion = questions.length - 1;
         loadQuestion();
     } catch (e) {
-        alert("Erro ao gerar missão. Verifique sua chave no console!");
+        console.error("Erro na Matrix:", e);
     }
+}
 }
 async function gerarRelatorioEstrategico() {
     const docRef = doc(db, "user_stats", "endrew");
