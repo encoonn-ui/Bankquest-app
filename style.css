@@ -14,9 +14,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Garante altura total */
     margin: 0;
-    overflow: hidden;
+    overflow-y: auto; /* Permite rolar se a questão for grande */
+    padding: 20px 0; /* Espaço para não grudar nas bordas no celular */
 }
 
 .game-container {
@@ -32,6 +33,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .card {
@@ -77,11 +80,13 @@ h2 {
     text-align: left;
     transition: all 0.2s;
     font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .option-btn:hover {
     border-color: var(--primary);
     background: #323238;
+    transform: translateX(5px); /* Efeito de movimento ao passar o mouse */
 }
 
 /* Classes de Estado (Adicionadas pelo JS) */
@@ -104,16 +109,16 @@ h2 {
     animation: fadeIn 0.5s;
 }
 
-#next-btn {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
+/* Estilo para o botão da IA (caso remova o estilo inline do HTML) */
+#ai-btn {
+    transition: transform 0.2s;
+}
+#ai-btn:active {
+    transform: scale(0.98);
+}
+#ai-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
 }
 
 .hidden { display: none; }
