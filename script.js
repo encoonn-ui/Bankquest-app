@@ -1,95 +1,87 @@
-// --- AREA DE CONFIGURAÇÃO ---
-// ⚠️ IMPORTANTE: Apague a chave antiga e cole a NOVA chave que você gerou agora.
-const API_KEY = "AIzaSyAsyvIgxMsEG6eRwUNAFAg6HOpvPGbbrYc"; 
+// --- CONFIGURAÇÃO NOVA (COM SEU SERVIDOR) ---
+// Coloque aqui o link que você copiou do Cloudflare (Workers)
+const WORKER_URL = "https://plain-surf-53cfproxy-gemini-concurso.encoonn.workers.dev"; // Cole seu link aqui se for diferente
 
-// Variáveis do Jogo
-let xp = 0;
-let streak = 0;
-let questaoAtual = null;
-
-// --- FUNÇÃO CÉREBRO (IA) ---
 async function buscarQuestaoInedita() {
+    // 1. Prepara o terreno (Visual)
     const btn = document.getElementById('ai-btn');
     const catTag = document.getElementById('category');
     const qText = document.getElementById('question-text');
     const container = document.getElementById('options-container');
     const feedbackArea = document.getElementById('feedback-area');
 
-    // 1. Prepara o terreno (Visual)
     btn.innerText = "⚡ CONECTANDO AO CÉREBRO...";
     btn.disabled = true;
     catTag.innerText = "ANALISANDO EDITAL...";
     
     if(feedbackArea) feedbackArea.classList.add('hidden');
 
-    // 2. Sorteia o Tópico (Estratégia Pareto BB)
+    // 2. Sorteia o Tópico (Igual ao seu código original)
     const fases = [
-        "Fase 1: Vendas e Negociação (CDC e LGPD) - FOCO TOTAL",
-        "Fase 2: Conhecimentos Bancários (Pix e SFN)",
-        "Fase 3: Português (Crase e Interpretação Cesgranrio)",
-        "Fase 4: Informática (Segurança da Informação)"
+       "Fase 1: Vendas e Negociação (CDC e LGPD) - FOCO TOTAL",
+       "Fase 2: Conhecimentos Bancários (Pix e SFN)",
+       "Fase 3: Português (Crase e Interpretação Cesgranrio)",
+       "Fase 4: Informática (Segurança da Informação)"
     ];
     const faseSorteada = fases[Math.floor(Math.random() * fases.length)];
 
-    // 3. Monta o Pedido para o Google
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
-    
-    const promptCorpo = {
-        contents: [{
-            parts: [{
-                text: `Aja como mentor para o Banco do Brasil. Gere uma questão Cesgranrio sobre ${faseSorteada}. Responda APENAS o JSON: {"category": "${faseSorteada}", "question": "Pergunta", "options": ["A","B","C","D","E"], "correctIndex": 0, "explanation": "Explicação curta"}`
-            }]
-        }]
-    };
-
     try {
-        // 4. Envia o Pedido (Com a correção do Header JSON)
-        const response = await fetch(url, { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }, // <--- O SEGREDO ESTÁ AQUI
-            body: JSON.stringify(promptCorpo) 
+        // 3. Chama o SEU servidor (Worker) em vez do Google direto
+        const response = await fetch(WORKER_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                // Enviamos apenas o texto do prompt
+                prompt: `Aja como mentor para o Banco do Brasil. Gere uma questão Cesgranrio sobre ${faseSorteada}. Responda APENAS o JSON: {"category": "${faseSorteada}", "question": "Pergunta", "options": ["A","B","C","D","E"], "correct": 0, "comment": "Comentário"}`
+            })
         });
 
-        // Verifica se a chave foi aceita
         if (!response.ok) {
-            const erroInfo = await response.json();
-            throw new Error(`Erro na API (${response.status}): Verifique sua Chave API nova.`);
+            throw new Error(`Erro no Servidor: ${response.status}`);
         }
 
         const data = await response.json();
-        
-        // 5. Limpa a resposta da IA
+
+        // 4. Limpeza da Resposta (Igual ao seu código original)
+        // O Worker devolve a estrutura do Google, então lemos do mesmo jeito:
         let resText = data.candidates[0].content.parts[0].text;
+        
+        // Remove os marcadores de código que o Gemini às vezes coloca (```json ... ```)
         resText = resText.replace(/```json/g, "").replace(/```/g, "").trim();
         
+        // Converte o texto limpo em Objeto Real
         questaoAtual = JSON.parse(resText);
-        
-        // 6. Mostra na Tela
+
+        // 5. Mostra na Tela
         catTag.innerText = questaoAtual.category;
         qText.innerText = questaoAtual.question;
-        container.innerHTML = '';
-
+        
+        // Limpa botões antigos e cria os novos
+        container.innerHTML = "";
+        
         questaoAtual.options.forEach((opt, i) => {
             const b = document.createElement('button');
             b.className = 'option-btn';
             b.innerText = opt;
-            // Estilo garantido via JS
-            b.style.cssText = "background: #29292e; border: 1px solid #323238; color: white; padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; margin-bottom: 10px; width: 100%; font-size: 1rem; transition: 0.2s;";
+            // Estilo mantido
+            b.style.cssText = "background: #29292e; border: 1px solid #323238; color: white; padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; font-size: 1rem;";
             
             b.onmouseover = () => b.style.borderColor = "#8257e6";
             b.onmouseout = () => b.style.borderColor = "#323238";
+            b.onclick = () => verificarResposta(i, b); // Chama sua função de verificar
             
-            b.onclick = () => verificarResposta(i, b);
             container.appendChild(b);
         });
 
-    } catch (e) {
-        console.error(e);
-        alert(`🚨 ${e.message}\n\nDica: Gere uma chave nova no Google AI Studio e cole no script.js`);
+    } catch (error) {
+        console.error(error);
+        alert("Erro ao gerar missão. Tente novamente! (Verifique o console para detalhes)");
+        catTag.innerText = "ERRO DE CONEXÃO";
     } finally {
         btn.innerText = "✨ GERAR MISSÃO INÉDITA (IA)";
         btn.disabled = false;
     }
+}
 }
 
 // --- FUNÇÃO DE RESPOSTA ---
