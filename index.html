@@ -3,45 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BankQuest - Agente Comercial</title>
+    <title>BankQuest - Direção BB</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-
     <div class="game-container">
         <header class="hud">
             <div class="stats">
                 <span id="streak-counter">🔥 0</span>
                 <span id="score-counter">💎 0 XP</span>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress"></div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
         </header>
 
         <main id="quiz-card" class="card">
-            <div class="category-tag" id="category">VENDAS E NEGOCIAÇÃO</div>
-            <h2 id="question-text">Carregando missão...</h2>
-            
-            <div class="options-grid" id="options-container">
-                </div>
+            <div class="category-tag" id="category">CARREGANDO MISSÃO...</div>
+            <h2 id="question-text">Clique no botão laranja para iniciar sua jornada.</h2>
+            <div class="options-grid" id="options-container"></div>
 
             <div id="feedback-area" class="hidden">
                 <p id="explanation"></p>
-                <button id="next-btn" onclick="nextQuestion()">Próxima Missão ➔</button>
+                <button id="next-btn" onclick="nextQuestion()">Próxima Questão ➔</button>
             </div>
-        </main> <button id="ai-btn" onclick="buscarQuestaoInedita()" style="background: #ff9d00; color: white; margin-top: 10px; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">
-    ✨ GERAR MISSÃO INÉDITA (IA)
-</button> 
+
+            <button id="ai-btn" onclick="buscarQuestaoInedita()" style="background: #ff9d00; color: white; margin-top: 20px; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">
+                ✨ GERAR MISSÃO INÉDITA (IA)
+            </button>
+            <button onclick="gerarRelatorioEstrategico()" style="background: #00d4ff; color: #000; margin-top: 10px; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">
+                📊 RELATÓRIO DE BATALHA (PARETO)
+            </button>
+        </main>
     </div>
 
     <audio id="snd-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
     <audio id="snd-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
-<button onclick="gerarRelatorioEstrategico()" style="background: #00d4ff; color: #000; margin-top: 10px; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">
-    📊 VER MEU DESEMPENHO (PARETO)
-</button>
