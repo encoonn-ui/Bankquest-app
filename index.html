@@ -12,7 +12,7 @@
     <div class="game-container">
         <header class="hud">
             <div class="stats">
-                <span id="streak-counter" title="Sequência Atual">🔥 0</span>
+                <span id="streak-counter">🔥 0</span>
                 <div class="level-bar-container">
                     <div id="level-progress" class="level-progress-fill"></div>
                 </div>
@@ -23,20 +23,16 @@
 
         <main class="card">
             <div class="category-tag" id="category">ESTRATÉGIA PARETO 80/20</div>
-            
-            <h2 id="question-text">Clique no botão abaixo para iniciar seu treinamento de elite com questões nível Cesgranrio.</h2>
-            
-            <div class="options-grid" id="options-container">
-                </div>
+            <h2 id="question-text">Clique no botão abaixo para iniciar seu treinamento de elite Cesgranrio.</h2>
+            <div class="options-grid" id="options-container"></div>
 
             <div id="feedback-area" class="hidden">
-                <div class="feedback-badge" id="feedback-status"></div>
                 <p id="explanation"></p>
             </div>
 
-            <button id="ai-btn" onclick="buscarQuestaoInedita()">
-                ✨ GERAR MISSÃO INÉDITA (IA)
-            </button>
+            <div id="history-panel" class="history-dots"></div>
+
+            <button id="ai-btn" onclick="buscarQuestaoInedita()">✨ GERAR MISSÃO INÉDITA (IA)</button>
         </main>
     </div>
 
