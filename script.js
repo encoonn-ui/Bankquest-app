@@ -1,6 +1,6 @@
 // --- AREA DE CONFIGURAÇÃO ---
 // ⚠️ IMPORTANTE: Apague a chave antiga e cole a NOVA chave que você gerou agora.
-const GOOGLE_API_KEY = "AIzaSyAsyvIgxMsEG6eRwUNAFAg6HOpvPGbbrYc"; 
+const API_KEY = "AIzaSyAsyvIgxMsEG6eRwUNAFAg6HOpvPGbbrYc"; 
 
 // Variáveis do Jogo
 let xp = 0;
